@@ -1,0 +1,37 @@
+% !Mode:: "TeX:UTF-8"
+%%==================================================
+%% abstract.tex for SJTU Master Thesis
+%% based on CASthesis
+%% modified by wei.jianwen@gmail.com
+%% version: 0.3a
+%% Encoding: UTF-8
+%% last update: Dec 5th, 2010
+%%==================================================
+
+\begin{abstract}
+近年来在图像分析、动作识别等领域，人体姿势预测这个基本问题得到了科学家们广泛的关注.
+从已有的工作来看，人的头部、身躯等部位已经取得了很高的精度，但是手臂由于其丰富的姿势变化，目前还只有0.7的精度，这几乎是人体姿势预测领域最大的挑战。
+一个明显的想法是，衣服属性信息对于姿势的精准预测是有很大的帮助.
+前人也有很多利用衣服属性信息去帮助姿势预测的工作，但是需要人为的去标注大量的衣服属性标签，这是一项极其耗时的工作。
+
+在这篇论文中，我们提出了一个将衣服属性作为隐变量的方法，采用隐变量结构式支持向量机算法去提高人体姿势预测的精度。
+在我们提出的方法中，我们将衣服属性作为隐变量，这样就不需要显示的对衣服属性进行标注.
+在此基础上，我们设计了良好的联合特征，并采用迭代式的结构式学习来进行模型的参数学习。
+最后我们提出了一个近似迭代的推理算法来解决我们的有环图问题。
+我们在两个真实的公开数据集上做了大量的实验，结果显示我们的算法取得了目前最好的精度，特别是在手臂的预测上，我们比前人工作提高了8个百分点。
+
+\keywords{\large 姿势预测 \quad 结构式学习 \quad 隐变量}
+\end{abstract}
+
+\begin{englishabstract}
+As a fundamental technique with wide applications in image parsing, action recognition, etc., 
+human pose estimation (HPE) has been extensively investigated in recent years. 
+For accurate and reliable estimation of the human pose, it is well-recognized that the clothing attributes are useful and should be utilized properly. 
+Most previous approaches, however, require to manually annotate the clothing attributes and are therefore time-consuming. 
+In this paper, by utilizing the latent structured support vector machines (LSSVM), we devise a \emph{latent} clothing attribute approach for HPE. 
+Our approach models the clothing attributes as latent variables and thus requires no explicit labeling for the clothing attributes. 
+We employ an interactive strategy to train the LSSVM model: in each iteration, one kind of variables (e.g., human pose or clothing attribute) are fixed and the others are optimized. 
+Our extensive experiments on two real-world benchmarks show state-of-the-art performance of our proposed approach.
+
+\englishkeywords{\large pose estimation, structure learning, latent variables}
+\end{englishabstract}
