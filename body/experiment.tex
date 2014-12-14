@@ -50,8 +50,8 @@ Our Approach & \textbf{100} & \textbf{97.2} & \textbf{91.3} & \textbf{99.1} & \t
 \end{table}
 
 \section{实验评测规则}
-我们和已有的三份工作进行了对比，包括Andriluka等\cite{}，Sapp等\cite{}，Yang and Ramanan等\cite{}。
-对于人体姿势预测的结果，我们采用标准的评测指标，即就是正确姿势的概率PCP，它代表了正确的姿势所占的比例。
+我们和已有的三份工作进行了对比，包括Andriluka等\cite{cvpr09}，Sapp等\cite{eccv10}，Yang and Ramanan等\cite{deva11}。
+对于人体姿势预测的结果，我们采用标准的评测指标，即就是正确姿势的概率PCP\cite{fer09}，它代表了正确的姿势所占的比例。
 对于衣服属性的聚类结果，我们采用聚类工作中的标准指标F1分值来进行评测。
 我们用KMeans聚类的结果作为衣服属性的基准，对于已有的三份工作，我们用他们得到的姿势解来求得最优的衣服属性，然后进行Kmeans聚类。
 
@@ -69,7 +69,7 @@ Our Approach & \textbf{100} & \textbf{97.2} & \textbf{91.3} & \textbf{99.1} & \t
 \section{实验结果分析}
 图6展示了我们算法得出的一些结果，可以定性的看出，我们的算法取得了不错的效果。
 在表2和表3中我们分别展示了Buffy和DL数据集的PCP评测结果。
-对于Buffy数据集，表2显示我们的方法超越了目前最好的方法Yang and Ramanan\cite{}。
+对于Buffy数据集，表2显示我们的方法超越了目前最好的方法Yang and Ramanan\cite{deva11}。
 众所周知，下臂的检测是最具有挑战性的，但是令人惊喜的是，我们的方法比目前最好的方法超过了7.5个百分点，这是一个很大的提升了，显示了我们将衣服属性考虑进去的优越性。
 对于DL数据集来说，我们的方法超越了目前已有的所有方法。
 
@@ -120,11 +120,11 @@ Our Approach & \textbf{57.2} & \textbf{60.3} & \textbf{74.7} & \textbf{64.1}  \\
 \label{fig:sleeve}
 \end{figure*}
 
-\section{复杂度分析}
+%\section{复杂度分析}
 
 \begin{figure}
 \centering
-\includegraphics[width=\textwidth]{img/result.pdf}
+\includegraphics[width=.8\textwidth]{img/result.pdf}
 \caption{ \textbf{我们的算法在Buffy和DL数据集上得到的结果示例}
 上面两个框中的结果是Buffy数据集上的，剩下的是DL数据集上的。
 我们用带方向的矩形框来表示人体姿势识别的结果。
@@ -135,3 +135,9 @@ Our Approach & \textbf{57.2} & \textbf{60.3} & \textbf{74.7} & \textbf{64.1}  \\
 \end{figure}
 
 \section{本章小结}
+在本章中，我们设计了大量的实验来验证我们提出的方法的可行性，特别是在加进了衣服属性变量以后，
+人体姿势预测结果的提升效果。
+从定性和定量的角度去对比了我们的工作和前人工作的性能差异，并且分析了我们工作的优势和不足。
+同时，我们展示了我们工作的另一个输出结果，将不同照片按照相似的衣服属性聚集在了一起，
+这样对于做衣服聚类工作是非常有效的，并且我们利用F1分值对聚类结果进行了评测。
+大量实验证明，我们提出的隐变量衣服属性方法取得了目前精度最好的人体姿势预测结果。

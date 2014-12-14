@@ -19,7 +19,7 @@
 \label{fig:frame}
 \end{figure}
 
-在图2中，我们描述了我们提出的方法。
+在图\ref{fig:frame}中，我们描述了我们提出的方法。
 首先，我们进行一步预处理，检测出图片中可能的人体姿势，构成一个人体姿势解的候选集。
 这使得我们可以对搜索空间进行管理，从而降低我们的搜索空间，加速我们的求解过程。
 其次，我们设计并抽取了人体部位和衣服属性相关的特征。
@@ -39,7 +39,6 @@ Sleeve &  All arms & Color Histogram & 3 \\ \hline
 Neckline & Torso + Head & HOG & 4\\ \hline
  Pattern & Torso & LBP~\cite{lbp} & 5\\ \hline
 \end{tabular}
-\label{tb:attr}
 \end{table}
 
 在介绍我们的模型细节之前，我们介绍一些本文中需要用到的符号表示。
@@ -84,7 +83,7 @@ $n$ 是衣服属性的个数（本文中，$n = 3$），$a_r$ 是第$r$个属性
 
 考虑预测函数 $f$，我们假定有一个分数函数 $S$ 定义了输入-输出对 $(\mathbf{x}, \mathbf{y})$ 的匹配程度：
 \begin{equation}
-\label{eq:S(x,y;beta)}
+\label{eq:map}
     S(\mathbf{x}, \mathbf{y};\beta) = \langle \beta, J(\mathbf{x}, \mathbf{y}) \rangle
 \end{equation}
 
@@ -94,7 +93,7 @@ $\beta$ 是需要去学习的模型参数。
 
 因此，我们的匹配函数 $f$ 可以写为如下表示：
 \begin{equation}
-    f(\mathbf{x}; \mathbf{\beta}) = { \mathbf{y} \in \mathcal{Y} } S(\mathbf{x}, \mathbf{y}; \mathbf{\beta})
+    f(\mathbf{x}; \mathbf{\beta}) = arg \max_{ \mathbf{y} \in \mathcal{Y} } S(\mathbf{x}, \mathbf{y}; \mathbf{\beta})
     %f(\mathbf{x}; \mathbf{\beta}) = \argmax { \mathbf{y} \in \mathcal{Y} } S(\mathbf{x}, \mathbf{y}; \mathbf{\beta})
     \label{eq:score}
 \end{equation}
@@ -127,20 +126,20 @@ $\beta$ 是需要去学习的模型参数。
 
 
 \begin{algorithm}
-\caption{Structured Learning with Latent SVM}
+\caption{包含隐变量的结构式支持向量机学习}
 \begin{algorithmic}[1]
     \REQUIRE Positive samples, negative samples, initial model $\beta$, number of relabel iteration $t_1$, number of hard negative mining iteration $t_2$.
-    \ENSURE Final Model ${\beta}^*$.
-    \STATE Initialize the final model: ${\beta}^* = \beta$.
-    \STATE Let the negative sample set $F_n = \emptyset$.
+    \ENSURE 最终模型 ${\beta}^*$.
+    \STATE 初始化最终模型: ${\beta}^* = \beta$.
+    \STATE 标记负例集为 $F_n = \emptyset$.
     \FOR{ relabel = 1 to $t_1$ }
-        \STATE Let the positive sample set $F_p = \emptyset$.
-        \STATE Add positive samples to $F_p$.
+        \STATE 标记正例集为 $F_p = \emptyset$.
+        \STATE 将正例逐个加入 $F_p$.
         \FOR{ iter = 1 to $t_2$ }
-            \STATE Add negative samples to $F_n$.
+            \STATE 将负例逐个加入 $F_n$.
             \STATE ${\beta}^* := \mathrm{Pegasos}({\beta}^*, F_p \bigcup F_n)$.\\
-            \STATE Remove easy negative samples: \\
-             Remove the samples whose feature vector $v$ satisfying $\langle{\beta}^*, v \rangle < -1$ from $F_n$.
+            \STATE 将容易的负例去除掉: \\
+             删除掉那些负例特征 $v$ 满足 $\langle{\beta}^*, v \rangle < -1$ from $F_n$.
         \ENDFOR
     \ENDFOR
 \end{algorithmic}
@@ -199,15 +198,15 @@ $[x_j - x_i, y_j - y_i, (x_j - x_i)^2, (y_j - y_i)^2]$~\cite{deva11}.
 并且我们采用Pegasos\cite{pegasos}算法来进行在线学习，这样就可以解决因为负例空间巨大而造成的训练时间复杂度很大。
 
 \begin{algorithm}
-\caption{Inference for Clothing Attributes}
+\caption{衣服属性预测算法}
 \begin{algorithmic}[1]
     \REQUIRE A sample $\mathbf{x}$, Model parameter $\beta$ , Human parts label $\mathbf{p}$
-    \ENSURE optimal clothing attributes value $\mathbf{a^*}$
-    \STATE let $T_r$ is the number of $r$-th clothing attribute type
+    \ENSURE 衣服属性的最优解 $\mathbf{a^*}$
+    \STATE 用 $T_r$ 来标记第 $r$-th 个衣服属性的种类数量
     \FOR {r:= 1 \textbf{to} 3}
-        \STATE select the attribute value which has highest score:\\
+        \STATE 选择使得下列分值函数值最高的衣服属性类型:\\
             %$\mathbf{a}_r = \argmax_{1 \leq r \leq T_r} \langle \beta_{pa}^r, j_{pa}(\mathbf{x}, P_r, a_r) \rangle $
-            $\mathbf{a}_r = {1 \leq r \leq T_r} \langle \beta_{pa}^r, j_{pa}(\mathbf{x}, P_r, a_r) \rangle $
+            $\mathbf{a}_r = arg \max_{1 \leq r \leq T_r} \langle \beta_{pa}^r, j_{pa}(\mathbf{x}, P_r, a_r) \rangle $
     \ENDFOR
 \end{algorithmic}
 \label{alg:attr}
@@ -216,7 +215,7 @@ $[x_j - x_i, y_j - y_i, (x_j - x_i)^2, (y_j - y_i)^2]$~\cite{deva11}.
 
 \subsection{目标函数}
 在这一小节中，我们需要定义问题的目标函数，即就是问题的优化函数，通过对优化函数的训练而求得我们最终的解。
-而我们的优化函数目标是学习我们在式\eqref{eq:S(x,y;beta)}中定义的匹配函数 $S(\mathbf{x}, \mathbf{y}; \beta)$，它将在后面联合估计预测中用到。
+而我们的优化函数目标是学习我们在式\ref{eq:map}中定义的匹配函数 $S(\mathbf{x}, \mathbf{y}; \beta)$，它将在后面联合估计预测中用到。
 给定一个正例训样样本 $(\mathbf{x}, \mathbf{y})$，我们期望匹配函数 $S(\mathbf{x}, \mathbf{y}; \beta) \geq 1$。
 另一方面，如果一个训练样本是负例，那么匹配函数的输出应该是小于$-1$的。
 因此，给定一个训练集 $D = \{ (\mathbf{x}_1, \mathbf{y}_1, z_1), \cdots, (\mathbf{x}_q, \mathbf{y}_q, z_q) \}$， 其中 $z_k \in \{1, -1\}$ 表示第 $k$ 个样本是正例还是负例，我们可以通过优化以下函数来求解模型的参数 $\beta$：
@@ -264,23 +263,23 @@ $[x_j - x_i, y_j - y_i, (x_j - x_i)^2, (y_j - y_i)^2]$~\cite{deva11}.
 
 
 \begin{algorithm}
-\caption{Approximate Inference for Clothing Attribute Aware HPE Task}
+\caption{包含隐变量衣服属性的HPE近似预测算法}
 \begin{algorithmic}[1]
     \REQUIRE A sample $\mathbf{x}$, Model parameter $\beta$.
     \ENSURE Optimal estimation $\mathbf{y}^*$ and score $S*$.
     \STATE Set $\mathbf{y}^* = \emptyset$.
-    \STATE Set the optimal score $S^* = -\infty$.
-    \STATE Initialize the parts estimation $\mathbf{p}_0$.
+    \STATE 记最优的分值为 $S^* = -\infty$.
+    \STATE 初始化人体部位最优解 $\mathbf{p}_0$.
     \REPEAT
-        \STATE Compute the local optimal clothing attributes $\mathbf{a}_t$.
-        \STATE Compute the local optimal human pose $\mathbf{p}_t$.
+        \STATE 计算局部衣服属性最优解 $\mathbf{a}_t$.
+        \STATE 计算局部人体姿势最优解 $\mathbf{p}_t$.
 
-        \STATE Compute the local score: $S = S(\mathbf{x}, \mathbf{y}_t; \beta)$.
+        \STATE 计算局部最优分值: $S = S(\mathbf{x}, \mathbf{y}_t; \beta)$.
 
         \IF{$S > S^*$}
             \STATE $S^* = S$, $\mathbf{y}^* = \mathbf{y}_t $
         \ENDIF
-    \UNTIL{$S^*$ not change}
+    \UNTIL{$S^*$ 不再变化}
 \end{algorithmic}
 \label{alg:inference}
 \end{algorithm}
@@ -324,28 +323,28 @@ $[x_j - x_i, y_j - y_i, (x_j - x_i)^2, (y_j - y_i)^2]$~\cite{deva11}.
 通过以上步骤，我们就求得了人体躯干的最优解。
 
 \begin{algorithm}
-\caption{Inference for Human Pose}
+\caption{人体姿势的预测算法}
 \begin{algorithmic}[1]
     \REQUIRE A sample $\mathbf{x}$, Model parameter $\beta$ ,  Clothing attributes value $\mathbf{a}$
     \ENSURE optimal human parts estimation $\mathbf{p^*}$
-    \STATE set the optimal human parts estimation $\mathbf{p^*} = \emptyset$
-    \STATE set the node 0 as the root node
+    \STATE 记人体姿势的最优解集为 $\mathbf{p^*} = \emptyset$
+    \STATE 记节点0为根节点
     %\STATE Perform the bottom-up process to compute the score cost for each candidate
-    \FOR{ each candidate $\mathbf{p}_i$ of node $i$ }
-        \STATE set $m(\mathbf{p}_i) = \langle \beta_p^i, \phi_p(\mathbf{x}, p_i) \rangle + \langle \beta_{pa}^r, \Psi_{pa}(\mathbf{x}, P_r, a_r) \rangle$
+    \FOR{ 对于节点 $i$ 的每个候选解 $\mathbf{p}_i$  }
+        \STATE 记 $m(\mathbf{p}_i) = \langle \beta_p^i, \phi_p(\mathbf{x}, p_i) \rangle + \langle \beta_{pa}^r, \Psi_{pa}(\mathbf{x}, P_r, a_r) \rangle$
     \ENDFOR
-    \FOR{ each candidate $\mathbf{p}_j$ of parent node $j$ and $\mathbf{p}_i$ of child node $i$ }
+    \FOR{ 对于父亲节点 $j$ 和 $\mathbf{p}_i$ 的子节点 $i$ 的每个候选解 $\mathbf{p}_j$  }
         \STATE set $l(\mathbf{p}_i, \mathbf{p}_j) = \langle \beta_p^{ij}, \psi_p(\mathbf{x}, p_i, p_j) \rangle$
-        \IF{ $i$ is a leaf node }
+        \IF{ $i$ 是一个叶子节点 }
             \STATE $B_i(\mathbf{p}_j) = \max_{\mathbf{p}_i} (m(\mathbf{p}_i) + l(\mathbf{p}_i, \mathbf{p}_j) )$
         \ELSE
             \STATE $B_i(\mathbf{p}_j) = \max_{\mathbf{p}_i} (m(\mathbf{p}_i) + l(\mathbf{p}_i, \mathbf{p}_j) + \sum_{v \in C_i} B_v(\mathbf{p}_i) )$
         \ENDIF
     \ENDFOR
     %\STATE perform the top-down process to find the best candidate for each human part
-    \STATE select the best candidate for the root node: \\
+    \STATE 为根节点找出最优的解: \\
         $\mathbf{p}_0^* = \arg \max_{\mathbf{p}_0} ( m(\mathbf{p}_0) + \sum_{v \in C_0} B_v(\mathbf{p}_0) )$
-    \FOR{ each parent-child pair ($\mathbf{p}_j^*, \mathbf{p}_i$) }
+    \FOR{ 对于每个父亲-孩子节点对 ($\mathbf{p}_j^*, \mathbf{p}_i$) }
         \STATE $\mathbf{p}_i^* = \arg \max_{\mathbf{p}_i} B_i(\mathbf{p}_j^*)$
     \ENDFOR
 \end{algorithmic}

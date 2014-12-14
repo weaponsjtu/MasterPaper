@@ -45,23 +45,42 @@
 统计学上来讲，为大量的中间状态空间预测参数，会带来预测错误的增加。
 综上所述，很多计算机视觉中的问题不适合用基于连续随机变量的图模型来建模，而最好采用基于离散变量的图模型来进行建模。
 
-图片
+
+\begin{figure}[tbp]
+    \centering
+    \subfigure[采用图画式结构产生的人体姿势预测]{
+        \includegraphics[width=.45\textwidth]{img/graph1.jpg}
+    }
+    \subfigure[概率图模型表示的图画式结构]{
+        \includegraphics[width=.45\textwidth]{img/graph2.jpg}
+    }
+    \caption{
+        概率图模型
+    }
+    \label{fig:graphmodel}
+\end{figure}
+
 
 \section{图画式结构}
 基于对象的图画式结构模型是由部位的集合构成的，并且包含了部位之间的联系，像一个弹簧结构一样，有些部位之间有关联。
 图画式结构模型采用形状特性来描述每个部位，用形变信息来描述相关联的两个部位。
 本质上来说，它是一个很通用的模型，因为这个模型和具体描述每个部位的形状特征是无关的，研究者可以使用任意一种形状特征，比如方向梯度直方图（HOG）等，
 而且这个模型和描述相关联部位的形变特征也是无关的，研究者也可以使用任意一种形变特征。
-一般来讲，表示图画式结构模型的最自然的方式是无向图$G=(V, E)$，其中顶点集合为$V = {v_1, v_2, \cdots, v_n}$，对应了n个部位，
+一般来讲，表示图画式结构模型的最自然的方式是无向图$G=(V, E)$，其中顶点集合为$V = \left\{v_1, v_2, \cdots, v_n \right\}$，对应了n个部位，
 任意一条边$(v_i, v_j) \in E$ 代表了两个相关联顶点$v_i$和$v_j$之间的关系。
 对于物体的信息，我们用配置信息$L = (l_1, l_2, \cdots, l_n)$ 来描述，其中$l_i$代表部位$v_i$的位置。
 一般情况下，我们的$L$只代表物体的位置，但是配置信息其实还可以代表更多的信息，它代表了每个部位的表示方式。
 每个部位的位置信息可以简单的描述它在图像中的像素位置，但是更复杂的、更多的参数也是可能的。
 举例来说，对于我们文章中提出的隐式衣服属性模型，每个部位的配置信息包括位置、大小、方向等信息。
 
-图片
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{img/ps.jpg}
+\caption{人脸部弹簧模型}
+\label{fig:ps}
+\end{figure}
 
-在图画式结构模型的经典论文\cite{PS}中，我们用能量函数来描述一个图画式结构模型和测试图片之间的不匹配程度，
+在图画式结构模型的经典论文\cite{ps1}中，我们用能量函数来描述一个图画式结构模型和测试图片之间的不匹配程度，
 而问题就是要最小化这个能量函数。
 对于每一种所有部位的配置形式的损失或者能量，它与下面两方面内容有关系：
 一是每个部位跟测试图片中这个位置的不匹配程度，而是两个部位的位置关系和形变模型的不匹配程度。
@@ -69,14 +88,33 @@
 对于两个相关联的部位，我们用函数$d_{ij}(l_i, l_j)$来测量$(v_i, v_j)$和测试图片中位置$(l_i, l_j)$的不匹配程度。
 因此，对于测试图片来说，和模型最匹配的配置信息形式应该是：
 
-%equation
+\begin{equation}
+    \label{eq:pseq}
+    L^{\*} = arg \min {\left( \sum_{i=1}^{n} m_i(l_i) + \sum_{ (v_i, v_j) \in E } d_{ij}(l_i, l_j) \right)}
+\end{equation}
 
 公式表示了一种最优的配置信息，它最小化了每个部位的不匹配程度$m_i$与每两个关联部位不匹配程度$d_{ij}$的和。
 一般地，描述形变特征不匹配程度的函数往往只跟两个部位的相对位置有关系，这样使得模型可以很好的使用全局变换。
 需要注意的是，一个图画式结构模型和测试图片的能量函数不只是跟每个单独部位的位置有关系，
 而是依赖于所有的部位形状特征匹配度和所有相关联部位的形变特征匹配度的。
 
-可以看出这个能量函数\ref{}是简单并且直观的。
+\begin{figure}[tbp]
+    \centering
+    \subfigure[]{
+        \includegraphics[width=.45\textwidth]{img/ps1.JPG}
+    }
+    \subfigure[]{
+        \includegraphics[width=.45\textwidth]{img/ps2.JPG}
+    }
+    \caption{
+        用图画式结构检测出的一个简单的例子，人脸（a）和一个人体（b）。每张图片展示了需要检测的物体的全局最优解，
+        这是算法检测出的结果。这个物体模型是从训练数据学习出来的。
+    }
+    \label{fig:ps2}
+\end{figure}
+
+
+可以看出这个能量函数\ref{eq:pseq}是简单并且直观的。
 然而前人的很多工作都是采用启发式的或者局部搜索技术，他们很难找出一个最优解，因为最优解的获得严重依赖于初始化的方式，初始化参数设置的好，那么就有可能获得最优解，否则会很被动。
 而图画式结构模型提供了一种高效并且简单的方式，可以找到一个全局的最优解，并且不需要任何初始化步骤。
 
@@ -96,7 +134,30 @@
 比如概率预测和最大化后验概率。
 下面我们主要来看一下结构式学习在计算机视觉领域的应用。
 
-图片
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{img/struct.jpg}
+\caption{首先第二幅图是利用简单的前背景和后背景分类器就可以输出，而第三幅图必须使用像素之间的关联才可以做到图像分割。}
+\label{fig:struct}
+\end{figure}
+
+%\begin{figure}[tbp]
+%    \centering
+%    \subfigure[输入图片]{
+%        \includegraphics[width=.3\textwidth]{img/struct1.jpg}
+%    }
+%    \subfigure[像素级分离]{
+%        \includegraphics[width=.3\textwidth]{img/struct2.jpg}
+%    }
+%    \subfigure[联合最优解$y^{*}$]{
+%        \includegraphics[width=.3\textwidth]{img/struct3.jpg}
+%    }
+%    \caption{
+%        首先第二幅图是利用简单的前背景和后背景分类器就可以输出，而第三幅图必须使用像素之间的关联才可以做到图像分割。
+%    }
+%    \label{fig:struct}
+%\end{figure}
+
 
 一般来讲，计算机视觉的目的就是让计算机能够从图片数据中理解出更高层的语义信息。
 这些图片数据可能来自于各种种类的格式或者形式，它可以是一张自然图片，也可以是多张卫星图片序列，沿着时间序列拍摄的。
@@ -113,13 +174,12 @@
 不止于构建一个单一的固定模型，我们还可以增加参数来描述变量之间的关系。
 给定标记好的数据和已知的输出变量类型，我们可以调整模型的参数，从而学出一组使得观测变量和输出变量最匹配的参数。这即就是参数学习或模型训练。
 
-\subsection{案例：图像分割}
-\cite{http://www.nowozin.net/sebastian/papers/nowozin2011structured-tutorial.pdf}
+%\subsection{案例：图像分割}
+%\cite{http://www.nowozin.net/sebastian/papers/nowozin2011structured-tutorial.pdf}
 
 
 \section{形变部位模型}
-\cite{lsvm}
-形变部位模型DPM（Deformable Part Model）是一个非常成功的目标检测算法，
+形变部位模型\cite{llsvm}DPM（Deformable Part Model）是一个非常成功的目标检测算法，
 连续获得VOC（Visual Object Class）07，08，09年的检测冠军。
 目前已成为众多分类器、分割、人体姿态和行为分类的重要部分。
 2010年Pedro Felzenszwalb被VOC授予“终身成就奖”。
@@ -127,10 +187,15 @@ DPM可以看作是HOG（Histograms of Oriented Gradients）的扩展，大体思
 先计算梯度方向直方图，然后用SVM（Support Vector Machine）训练得到物体的梯度模型（Model）。
 有了这样的模板就可以直接用来分类了，简单理解就是模型和目标匹配。DPM只是在模型上做了很多改进工作。
 
-图片
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{img/dpm.jpg}
+\caption{DPM模型的框架流程图}
+\label{fig:dpm}
+\end{figure}
 
 上图是HOG论文中训练出来的人体模型。它是但模型，对直立的正面和背面人检测效果很好，较以前取得了重大的突破。
-也是目前为止最好的特征（最近被CVPR2013年的一篇论文\cite{Histograms of Sparse Codes for Object Detection}超过了）。
+也是目前为止最好的特征（最近被CVPR2013年的一篇论文\cite{hsc}超过了）。
 但是，如果是侧面呢？所以自然我们会想到利用更多的模型去构建。
 DPM就使用了2个模型，主页上最新版本的程序使用了12个模型。
 有了多模型，就可以解决视角的问题了，还有一个严重的问题，动物是动的，就算是没有生命的车也有很多款式，
@@ -140,6 +205,12 @@ DPM就使用了2个模型，主页上最新版本的程序使用了12个模型�
 还有我们要加入子模型和主模型中位置的偏移程度的Cost，也就是综合得分要减去偏移的cost。
 本质上就是要使用子模型和主模型的空间先验知识。
 
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{img/dpm1.png}
+\caption{自行车的检测案例}
+\label{fig:dpm1}
+\end{figure}
 
 \section{本章小结}
 本章介绍了与我们工作相关的一些背景知识，包括图模型、图画式结构模型、结构式学习、形变部位模型等，

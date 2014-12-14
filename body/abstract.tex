@@ -14,24 +14,29 @@
 一个明显的想法是，衣服属性信息对于姿势的精准预测是有很大的帮助.
 前人也有很多利用衣服属性信息去帮助姿势预测的工作，但是需要人为的去标注大量的衣服属性标签，这是一项极其耗时的工作。
 
-在这篇论文中，我们提出了一个将衣服属性作为隐变量的方法，采用隐变量结构式支持向量机算法去提高人体姿势预测的精度。
-在我们提出的方法中，我们将衣服属性作为隐变量，这样就不需要显示的对衣服属性进行标注.
-在此基础上，我们设计了良好的联合特征，并采用迭代式的结构式学习来进行模型的参数学习。
-最后我们提出了一个近似迭代的推理算法来解决我们的有环图问题。
-我们在两个真实的公开数据集上做了大量的实验，结果显示我们的算法取得了目前最好的精度，特别是在手臂的预测上，我们比前人工作提高了8个百分点。
+在本文中，我们提出了基于隐式衣服属性的人体姿势预测。
+我们通过对图画式结构进行扩展来形式化人体姿势预测问题，特别地，我们将衣服属性作为隐变量来建模。
+跟传统的基于标注信息进行预测的方法不同，我们不需要显示的标注额外的信息，而且可以高效的进行求解。
+在本文中，我们定义了几种比较重要的衣服属性，并且建立了衣服属性和人体部位之间的关系（比如袖子和手臂等）。
+进而，我们设计了两种特征，一是人体躯干对应的特征，二是人体躯干和衣服属性的联合特征。
+我们采用隐式结构式支持向量机算法来进行模型的训练。
+所有的隐变量问题都会涉及到隐变量的初始化问题，我们采用K-Means聚类算法来初始化隐变量。
+接着，我们采用增量迭代的方式来进行参数的学习，即就是最小化隐式结构式支持向量机的目标函数。
+更为详尽的，我们采用迭代的方式来训练模型，首先当衣服属性变量确定的时候，我们采用动态规划的算法进行人体姿势的求解。
+另一步是，当人体姿势确定的时候，我们可以采用第三章提出的算法来确定衣服属性的变量。
+在两个公开的数据集上，我们进行了有力的实验，结果显示我们的方法超过了传统最好的方法，
+特别是在手臂的预测上，我们比前人工作提高了8个百分点，并且我们将具有同样衣服属性的照片聚在了一起。
 
 \keywords{\large 姿势预测 \quad 结构式学习 \quad 隐变量}
 \end{abstract}
 
 \begin{englishabstract}
-As a fundamental technique with wide applications in image parsing, action recognition, etc., 
-human pose estimation (HPE) has been extensively investigated in recent years. 
-For accurate and reliable estimation of the human pose, it is well-recognized that the clothing attributes are useful and should be utilized properly. 
-Most previous approaches, however, require to manually annotate the clothing attributes and are therefore time-consuming. 
-In this paper, by utilizing the latent structured support vector machines (LSSVM), we devise a \emph{latent} clothing attribute approach for HPE. 
-Our approach models the clothing attributes as latent variables and thus requires no explicit labeling for the clothing attributes. 
-We employ an interactive strategy to train the LSSVM model: in each iteration, one kind of variables (e.g., human pose or clothing attribute) are fixed and the others are optimized. 
-Our extensive experiments on two real-world benchmarks show state-of-the-art performance of our proposed approach.
+As a fundamental technique with wide applications in image parsing, action recognition, etc.,
+human pose estimation (HPE) has been extensively investigated in recent years.
+For accurate and reliable estimation of the human pose, it is well-recognized that the clothing attributes are useful and should be utilized properly.
+Most previous approaches, however, require to manually annotate the clothing attributes and are therefore time-consuming.
+
+In this paper, we shall introduce a \emph{latent} clothing attribute approach for HPE. Our approach formulates the HPE problem by extending the pictorial structure framework~\cite{ps1,ps2} and, in particular, models the clothing attributes as \emph{latent variables}. Comparing to the previous approaches that rely on label information, our latent approach, in sharp contrast, requires no explicit labels of the clothing attributes and can therefore be executed in an efficient way. We define some clothing attributes and build their connections with human parts (e.g., sleeve with arms). Some domain specific features, including \emph{pose-specific} features and \emph{pose-attribute} features, are designed to describe the connections. We utilize the latent structured support vector machines (LSSVM) for the training procedure, where the attribute values are initialized by a simple K-Means clustering algorithm. Then the model parameters are learnt by employing a relabel strategy, which minimizes the objective function of LSSVM in an ``alternating direction'' manner. More precisely, we perform an iterative scheme to train the model: Given the (latent) clothing attributes, we perform a dynamic programming algorithm to find a suboptimal solution for human pose; Given the human pose, we seek the optimal attribute values by performing a greedy search on the attribute space. We empirically show that our approach can achieve the state-of-the-art performance on two benchmarks, especially on the estimation of arms, we get the 8\% improvement than previous approaches.
 
 \englishkeywords{\large pose estimation, structure learning, latent variables}
 \end{englishabstract}
