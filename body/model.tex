@@ -128,7 +128,7 @@ $\beta$ 是需要去学习的模型参数。
 \begin{algorithm}
 \caption{包含隐变量的结构式支持向量机学习}
 \begin{algorithmic}[1]
-    \REQUIRE Positive samples, negative samples, initial model $\beta$, number of relabel iteration $t_1$, number of hard negative mining iteration $t_2$.
+    \REQUIRE 正例样本集合, 负例样本集合, 初始模型参数 $\beta$, 重调整策略的次数 $t_1$, 困难负例挖掘的迭代次数 $t_2$.
     \ENSURE 最终模型 ${\beta}^*$.
     \STATE 初始化最终模型: ${\beta}^* = \beta$.
     \STATE 标记负例集为 $F_n = \emptyset$.
@@ -200,7 +200,7 @@ $[x_j - x_i, y_j - y_i, (x_j - x_i)^2, (y_j - y_i)^2]$~\cite{deva11}.
 \begin{algorithm}
 \caption{衣服属性预测算法}
 \begin{algorithmic}[1]
-    \REQUIRE A sample $\mathbf{x}$, Model parameter $\beta$ , Human parts label $\mathbf{p}$
+    \REQUIRE 测试图片样本 $\mathbf{x}$, 模型参数 $\beta$ , 人体姿势的局部最优解 $\mathbf{p}$
     \ENSURE 衣服属性的最优解 $\mathbf{a^*}$
     \STATE 用 $T_r$ 来标记第 $r$-th 个衣服属性的种类数量
     \FOR {r:= 1 \textbf{to} 3}
@@ -265,8 +265,8 @@ $[x_j - x_i, y_j - y_i, (x_j - x_i)^2, (y_j - y_i)^2]$~\cite{deva11}.
 \begin{algorithm}
 \caption{包含隐变量衣服属性的HPE近似预测算法}
 \begin{algorithmic}[1]
-    \REQUIRE A sample $\mathbf{x}$, Model parameter $\beta$.
-    \ENSURE Optimal estimation $\mathbf{y}^*$ and score $S*$.
+    \REQUIRE 测试图片样本 $\mathbf{x}$, 模型参数 $\beta$.
+    \ENSURE 人体姿势的最优解 $\mathbf{y}^*$ 和最优分值 $S*$.
     \STATE Set $\mathbf{y}^* = \emptyset$.
     \STATE 记最优的分值为 $S^* = -\infty$.
     \STATE 初始化人体部位最优解 $\mathbf{p}_0$.
@@ -325,8 +325,8 @@ $[x_j - x_i, y_j - y_i, (x_j - x_i)^2, (y_j - y_i)^2]$~\cite{deva11}.
 \begin{algorithm}
 \caption{人体姿势的预测算法}
 \begin{algorithmic}[1]
-    \REQUIRE A sample $\mathbf{x}$, Model parameter $\beta$ ,  Clothing attributes value $\mathbf{a}$
-    \ENSURE optimal human parts estimation $\mathbf{p^*}$
+    \REQUIRE 测试图片样本 $\mathbf{x}$, 模型参数 $\beta$ ,  衣服属性的类别标签值 $\mathbf{a}$
+    \ENSURE 人体姿势的最优解 $\mathbf{p^*}$
     \STATE 记人体姿势的最优解集为 $\mathbf{p^*} = \emptyset$
     \STATE 记节点0为根节点
     %\STATE Perform the bottom-up process to compute the score cost for each candidate
@@ -350,3 +350,14 @@ $[x_j - x_i, y_j - y_i, (x_j - x_i)^2, (y_j - y_i)^2]$~\cite{deva11}.
 \end{algorithmic}
 \label{alg:ps}
 \end{algorithm}
+
+\section{本章小结}
+本章是我们论文最核心的一章，详细描述了本文中提到的基于隐变量衣服属性的人体姿势预测方法。
+主要分为三部分，一是联合特征设计，二是模型参数学习，三是有环图预测方法。
+联合特征设计是我们算法框架第一步，也是比较关键的一步。
+模型参数学习中，我们采用含有隐变量的结构式学习算法，由于包含了隐变量，优化函数变为了非凸函数，
+所以不能直接采用梯度下降方法。我们采用迭代式算法来求得近似解。
+在预测算法中，我们问题结构变为了有环图，对于无环图我们可以很高效的采用动态规划算法来求得全局最优解，
+但是对于有环图，我们无法直接求得全局最优解，于是我们提出了迭代地固定一类变量，来求解另一类变量的局部最优解，
+从而求得整个问题的局部最优解。
+
