@@ -14,8 +14,8 @@
 
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=\textwidth]{img/frame.pdf}
-\caption{ \textbf{我们算法的框架} }
+\includegraphics[width=0.9\textwidth]{img/frame.jpg}
+\bicaption{本文算法的框架}{本文算法的框架}{Fig}{The framework for this paper.}
 \label{fig:frame}
 \end{figure}
 
@@ -113,7 +113,7 @@ $\beta$ 是需要去学习的模型参数。
 
 \section{联合特征分析与设计}
 联合特征的设计是所有结构式学习中比较关键的一步\cite{svm-struct}，特征设计的好坏关系到模型预测能力的好坏，并决定了模型预测能力的上限。
-我们设计了两类特征来构成我们问题的联合特征$J(\mathbf{x}, \mathbf{y})$，包括人体姿势相关的特征$j_p(\mathbf{x}, \mathbf{p})$，以及人体姿势和衣服属性相关的特征$j_{pa}(\mathbf{x}, \mathbf{y});$。
+我们设计了两类特征来构成我们问题的联合特征$J(\mathbf{x}, \mathbf{y})$，包括人体姿势相关的特征$j_p(\mathbf{x}, \mathbf{p})$，以及人体姿势和衣服属性相关的特征$j_{pa}(\mathbf{x}, \mathbf{y})$。
 
 总体来看，我们问题的联合特征表示如下：
 \begin{equation}
@@ -128,18 +128,18 @@ $\beta$ 是需要去学习的模型参数。
 \begin{algorithm}
 \caption{包含隐变量的结构式支持向量机学习}
 \begin{algorithmic}[1]
-    \REQUIRE 正例样本集合, 负例样本集合, 初始模型参数 $\beta$, 重调整策略的次数 $t_1$, 困难负例挖掘的迭代次数 $t_2$.
-    \ENSURE 最终模型 ${\beta}^*$.
-    \STATE 初始化最终模型: ${\beta}^* = \beta$.
-    \STATE 标记负例集为 $F_n = \emptyset$.
+    \REQUIRE 正例样本集合, 负例样本集合, 初始模型参数 $\beta$, 重调整策略的次数 $t_1$, 困难负例挖掘的迭代次数 $t_2$
+    \ENSURE 最终模型 ${\beta}^*$
+    \STATE 初始化最终模型: ${\beta}^* = \beta$
+    \STATE 标记负例集为 $F_n = \emptyset$
     \FOR{ relabel = 1 to $t_1$ }
-        \STATE 标记正例集为 $F_p = \emptyset$.
-        \STATE 将正例逐个加入 $F_p$.
+        \STATE 标记正例集为 $F_p = \emptyset$
+        \STATE 将正例逐个加入 $F_p$
         \FOR{ iter = 1 to $t_2$ }
             \STATE 将负例逐个加入 $F_n$.
-            \STATE ${\beta}^* := \mathrm{Pegasos}({\beta}^*, F_p \bigcup F_n)$.\\
-            \STATE 将容易的负例去除掉: \\
-             删除掉那些负例特征 $v$ 满足 $\langle{\beta}^*, v \rangle < -1$ from $F_n$.
+            \STATE ${\beta}^* := \mathrm{Pegasos}({\beta}^*, F_p \bigcup F_n)$\\
+            \STATE 将容易的负例去除掉： \\
+             删除掉那些负例特征 $v$ 满足 $\langle{\beta}^*, v \rangle < -1$ from $F_n$
         \ENDFOR
     \ENDFOR
 \end{algorithmic}
@@ -156,7 +156,7 @@ $\beta$ 是需要去学习的模型参数。
 其中$E_p$ 是相连人体躯干的集合。
 
 形变特征的设计主要考虑相连人体躯干之间的几何约束，包括相对位置、相对角度和两者的距离，计算公式为：
-$[x_j - x_i, y_j - y_i, (x_j - x_i)^2, (y_j - y_i)^2]$~\cite{deva11}.
+$[x_j - x_i, y_j - y_i, (x_j - x_i)^2, (y_j - y_i)^2]$~\cite{deva11}。
 
 \subsection{衣服属性相关特征}
 通过衣服属性特征，我们将衣服属性结合到我们模型当中。
@@ -202,9 +202,9 @@ $[x_j - x_i, y_j - y_i, (x_j - x_i)^2, (y_j - y_i)^2]$~\cite{deva11}.
 \begin{algorithmic}[1]
     \REQUIRE 测试图片样本 $\mathbf{x}$, 模型参数 $\beta$ , 人体姿势的局部最优解 $\mathbf{p}$
     \ENSURE 衣服属性的最优解 $\mathbf{a^*}$
-    \STATE 用 $T_r$ 来标记第 $r$-th 个衣服属性的种类数量
+    \STATE 用 $T_r$ 来标记第 $r$ 个衣服属性的种类数量
     \FOR {r:= 1 \textbf{to} 3}
-        \STATE 选择使得下列分值函数值最高的衣服属性类型:\\
+        \STATE 选择使得下列分值函数值最高的衣服属性类型：\\
             %$\mathbf{a}_r = \argmax_{1 \leq r \leq T_r} \langle \beta_{pa}^r, j_{pa}(\mathbf{x}, P_r, a_r) \rangle $
             $\mathbf{a}_r = arg \max_{1 \leq r \leq T_r} \langle \beta_{pa}^r, j_{pa}(\mathbf{x}, P_r, a_r) \rangle $
     \ENDFOR
@@ -221,7 +221,7 @@ $[x_j - x_i, y_j - y_i, (x_j - x_i)^2, (y_j - y_i)^2]$~\cite{deva11}.
 因此，给定一个训练集 $D = \{ (\mathbf{x}_1, \mathbf{y}_1, z_1), \cdots, (\mathbf{x}_q, \mathbf{y}_q, z_q) \}$， 其中 $z_k \in \{1, -1\}$ 表示第 $k$ 个样本是正例还是负例，我们可以通过优化以下函数来求解模型的参数 $\beta$：
 \begin{equation}
 \begin{split}
-\min_{\beta}  \frac{1}{2} \|\beta\|^2 + C \sum_{k=1}^{q}\max(0, 1 - z_k S(\mathbf{x}_k, \mathbf{y}_k; \beta)).
+\min_{\beta}  \frac{1}{2} \|\beta\|^2 + C \sum_{k=1}^{q}\max(0, 1 - z_k S(\mathbf{x}_k, \mathbf{y}_k; \beta))
     \label{eq:latent}
 \end{split}
 \end{equation}
@@ -233,7 +233,7 @@ $[x_j - x_i, y_j - y_i, (x_j - x_i)^2, (y_j - y_i)^2]$~\cite{deva11}.
 
 有很多种方式可以进行模型中隐变量的初始化，我们可以随机的为隐变量设定标签信息，但是很有可能造成模型的不稳定性。
 在本文中，我们首先根据人体躯干的标签信息抽取每个衣服属性对应的底层特征，
-然后采用$k$-Means聚类算法来获得每个衣服属性的类中心，
+然后采用$K$-Means聚类算法来获得每个衣服属性的类中心，
 其中 $K$ 是我们在表\ref{tb:attr}中定义的衣服属性的类别数目。
 因此，隐变量衣服属性的初始标签可以通过其最近的类中心来决定。
 通过这种初始化的方式，我们得到了所有衣服属性的初始标签信息，所以我们可以求解问题 \eqref{eq:latent} 来得到初始的模型参数 $\beta$。
@@ -265,16 +265,16 @@ $[x_j - x_i, y_j - y_i, (x_j - x_i)^2, (y_j - y_i)^2]$~\cite{deva11}.
 \begin{algorithm}
 \caption{包含隐变量衣服属性的HPE近似预测算法}
 \begin{algorithmic}[1]
-    \REQUIRE 测试图片样本 $\mathbf{x}$, 模型参数 $\beta$.
-    \ENSURE 人体姿势的最优解 $\mathbf{y}^*$ 和最优分值 $S*$.
-    \STATE Set $\mathbf{y}^* = \emptyset$.
-    \STATE 记最优的分值为 $S^* = -\infty$.
-    \STATE 初始化人体部位最优解 $\mathbf{p}_0$.
+    \REQUIRE 测试图片样本 $\mathbf{x}$, 模型参数 $\beta$
+    \ENSURE 人体姿势的最优解 $\mathbf{y}^*$ 和最优分值 $S*$
+    \STATE Set $\mathbf{y}^* = \emptyset$
+    \STATE 记最优的分值为 $S^* = -\infty$
+    \STATE 初始化人体部位最优解 $\mathbf{p}_0$
     \REPEAT
-        \STATE 计算局部衣服属性最优解 $\mathbf{a}_t$.
-        \STATE 计算局部人体姿势最优解 $\mathbf{p}_t$.
+        \STATE 计算局部衣服属性最优解 $\mathbf{a}_t$
+        \STATE 计算局部人体姿势最优解 $\mathbf{p}_t$
 
-        \STATE 计算局部最优分值: $S = S(\mathbf{x}, \mathbf{y}_t; \beta)$.
+        \STATE 计算局部最优分值: $S = S(\mathbf{x}, \mathbf{y}_t; \beta)$
 
         \IF{$S > S^*$}
             \STATE $S^* = S$, $\mathbf{y}^* = \mathbf{y}_t $
@@ -287,8 +287,8 @@ $[x_j - x_i, y_j - y_i, (x_j - x_i)^2, (y_j - y_i)^2]$~\cite{deva11}.
 
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=0.9\textwidth]{img/whole-model.pdf}
-\caption{ \textbf{我们问题的因子图表示} }
+\includegraphics[width=0.9\textwidth]{img/whole-model.jpg}
+\bicaption{本文问题的因子图表示}{本文问题的因子图表示}{Fig}{The factor graph for our problem.}
 \label{fig:graph}
 \end{figure}
 

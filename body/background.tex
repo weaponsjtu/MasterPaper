@@ -54,9 +54,7 @@
     \subfigure[概率图模型表示的图画式结构]{
         \includegraphics[width=.45\textwidth]{img/graph2.jpg}
     }
-    \caption{
-        概率图模型
-    }
+    \bicaption{概率图模型}{概率图模型}{Fig}{Graphic Model}
     \label{fig:graphmodel}
 \end{figure}
 
@@ -76,7 +74,7 @@
 \begin{figure}
 \centering
 \includegraphics[width=0.9\textwidth]{img/ps.jpg}
-\caption{人脸部弹簧模型}
+\bicaption{人脸部弹簧模型}{人脸部弹簧模型}{Fig}{Pictorial Structure for Face Detection}
 \label{fig:ps}
 \end{figure}
 
@@ -106,10 +104,11 @@
     \subfigure[]{
         \includegraphics[width=.45\textwidth]{img/ps2.JPG}
     }
-    \caption{
-        用图画式结构检测出的一个简单的例子，人脸（a）和一个人体（b）。每张图片展示了需要检测的物体的全局最优解，
-        这是算法检测出的结果。这个物体模型是从训练数据学习出来的。
-    }
+    \bicaption{用图画式结构检测出的一个简单的例子，人脸（a）和一个人体（b）。每张图片展示了需要检测的物体的全局最优解，
+        这是算法检测出的结果。这个物体模型是从训练数据学习出来的。}{用图画式结构检测出的一个简单的例子，人脸（a）和一个人体（b）。每张图片展示了需要检测的物体的全局最优解，
+        这是算法检测出的结果。这个物体模型是从训练数据学习出来的。}{Fig}{Sample results for detection of a face (a); and a human body (b). Each
+image shows the globally best location for the corresponding object, as computed by
+our algorithms. The object models were learned from training examples.}
     \label{fig:ps2}
 \end{figure}
 
@@ -135,25 +134,6 @@
 下面我们主要来看一下结构式学习在计算机视觉领域的应用。
 
 
-
-%\begin{figure}[tbp]
-%    \centering
-%    \subfigure[输入图片]{
-%        \includegraphics[width=.3\textwidth]{img/struct1.jpg}
-%    }
-%    \subfigure[像素级分离]{
-%        \includegraphics[width=.3\textwidth]{img/struct2.jpg}
-%    }
-%    \subfigure[联合最优解$y^{*}$]{
-%        \includegraphics[width=.3\textwidth]{img/struct3.jpg}
-%    }
-%    \caption{
-%        首先第二幅图是利用简单的前背景和后背景分类器就可以输出，而第三幅图必须使用像素之间的关联才可以做到图像分割。
-%    }
-%    \label{fig:struct}
-%\end{figure}
-
-
 一般来讲，计算机视觉的目的就是让计算机能够从图片数据中理解出更高层的语义信息。
 这些图片数据可能来自于各种种类的格式或者形式，它可以是一张自然图片，也可以是多张卫星图片序列，沿着时间序列拍摄的。
 同样地，我们所讲的高层次信息也是多种多样的，从像素级别的图片表面信息，到图片中一般的物体（比如车、动物等）级别的信息。
@@ -161,7 +141,10 @@
 \begin{figure}
 \centering
 \includegraphics[width=0.9\textwidth]{img/struct.jpg}
-\caption{首先第二幅图是利用简单的前背景和后背景分类器就可以输出，而第三幅图必须使用像素之间的关联才可以做到图像分割。}
+\bicaption{首先第二幅图是利用简单的前背景和后背景分类器就可以输出，
+而第三幅图必须使用像素之间的关联才可以做到图像分割。}{首先第二幅图是利用简单的前背景和后背景分类器就可以输出，
+而第三幅图必须使用像素之间的关联才可以做到图像分割。}{Fig}{Pixel-wise separate classification by pixel only: 
+noisy, locally inconsistent decisions. Joint optimum result with spatially consistent decisions.}
 \label{fig:struct}
 \end{figure}
 
@@ -176,9 +159,12 @@
 不止于构建一个单一的固定模型，我们还可以增加参数来描述变量之间的关系。
 给定标记好的数据和已知的输出变量类型，我们可以调整模型的参数，从而学出一组使得观测变量和输出变量最匹配的参数。这即就是参数学习或模型训练。
 
-%\subsection{案例：图像分割}
-%\cite{http://www.nowozin.net/sebastian/papers/nowozin2011structured-tutorial.pdf}
-
+\begin{figure}
+\centering
+\includegraphics[width=0.7\textwidth]{img/dpm1.png}
+\bicaption{自行车的检测案例}{自行车的检测案例}{Fig}{Example for bicycle detection.}
+\label{fig:dpm1}
+\end{figure}
 
 \section{形变部位模型}
 形变部位模型\cite{llsvm}DPM（Deformable Part Model）是一个非常成功的目标检测算法，
@@ -192,13 +178,13 @@ DPM可以看作是HOG（Histograms of Oriented Gradients）的扩展，大体思
 \begin{figure}
 \centering
 \includegraphics[width=0.9\textwidth]{img/dpm.jpg}
-\caption{DPM模型的框架流程图}
+\bicaption{DPM模型的框架流程图}{DPM模型的框架流程图}{Fig}{The framework for DPM model}
 \label{fig:dpm}
 \end{figure}
 
 上图是HOG论文中训练出来的人体模型。它是但模型，对直立的正面和背面人检测效果很好，较以前取得了重大的突破。
 也是目前为止最好的特征（最近被CVPR2013年的一篇论文\cite{hsc}超过了）。
-但是，如果是侧面呢？所以自然我们会想到利用更多的模型去构建。
+但是，如果是侧面呢，所以自然我们会想到利用更多的模型去构建。
 DPM就使用了2个模型，主页上最新版本的程序使用了12个模型。
 有了多模型，就可以解决视角的问题了，还有一个严重的问题，动物是动的，就算是没有生命的车也有很多款式，
 单单有一个模型，如果动物动一下，人物运动一下，那模型就跟这个人的匹配程度就低了很多。
@@ -207,12 +193,7 @@ DPM就使用了2个模型，主页上最新版本的程序使用了12个模型�
 还有我们要加入子模型和主模型中位置的偏移程度的损失，也就是综合得分要减去偏移的损失。
 本质上就是要使用子模型和主模型的空间先验知识。
 
-\begin{figure}
-\centering
-\includegraphics[width=0.7\textwidth]{img/dpm1.png}
-\caption{自行车的检测案例}
-\label{fig:dpm1}
-\end{figure}
+
 
 \section{本章小结}
 本章介绍了与我们工作相关的一些背景知识，包括图模型、图画式结构模型、结构式学习、形变部位模型等。

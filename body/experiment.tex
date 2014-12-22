@@ -53,16 +53,19 @@ Our Approach & \textbf{100} & \textbf{97.2} & \textbf{91.3} & \textbf{99.1} & \t
 我们和已有的三份工作进行了对比，包括Andriluka等\cite{cvpr09}，Sapp等\cite{eccv10}，Yang and Ramanan等\cite{deva11}。
 对于人体姿势预测的结果，我们采用标准的评测指标，即就是正确姿势的概率PCP\cite{fer09}，它代表了正确的姿势所占的比例。
 对于衣服属性的聚类结果，我们采用聚类工作中的标准指标F1分值来进行评测。
-我们用KMeans聚类的结果作为衣服属性的基准，对于已有的三份工作，我们用他们得到的姿势解来求得最优的衣服属性，然后进行Kmeans聚类。
+我们用$K$-Means聚类的结果作为衣服属性的基准，对于已有的三份工作，我们用他们得到的姿势解来求得最优的衣服属性，然后进行$K$-Means聚类。
 
-\section{和前人工作的对比}
 
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=0.9\textwidth]{img/compare.pdf}
-\caption{ \textbf{我们的方法和 Yang and Ramanan~\cite{deva11}的对比 }
+\includegraphics[width=0.9\textwidth]{img/compare.jpg}
+\bicaption{\textbf{我们的方法和 Yang and Ramanan~\cite{deva11}的对比 }
 第1和3个结果是Yang and Ramanan~\cite{deva11}的方法产生的，我们发现这在上臂和下臂上得到了错误的结果。
-而我们的方法（第2和4个）得到了正确的结果。}
+而我们的方法（第2和4个）得到了正确的结果。}{\textbf{我们的方法和 Yang and Ramanan~\cite{deva11}的对比 }
+第1和3个结果是Yang and Ramanan~\cite{deva11}的方法产生的，我们发现这在上臂和下臂上得到了错误的结果。
+而我们的方法（第2和4个）得到了正确的结果。}{Fig}{\textbf{Comparison of our approach with Yang and Ramanan~\cite{deva11} }
+Yang and Ramanan~\cite{deva11} produces incorrect estimation (the 1st and 3rd) for upper and lower arms,
+while our latent clothing attribute approach produces correct.}
 \label{fig:compare}
 \end{figure}
 
@@ -77,7 +80,7 @@ Our Approach & \textbf{100} & \textbf{97.2} & \textbf{91.3} & \textbf{99.1} & \t
 在图5的上半部分中，我们展示了Buffy数据集的聚类效果，DL数据集的聚类效果在下方。
 表4和表5显示了每一种方法的F1分值，可以看出，我们的方法极大的提高了聚类的准确性，比基准要高出很多。
 这很大程度上是因为我们的模型训练策略和迭代式的优化算法。
-注意到，“Kmeans＋Groundtruth“为我们的模型训练提供了初始的衣服属性标签信息，这也验证了我们方法的有效性。
+注意到，“$K$-Means＋Groundtruth“为我们的模型训练提供了初始的衣服属性标签信息，这也验证了我们方法的有效性。
 
 \begin{table}
 \centering
@@ -111,12 +114,17 @@ Our Approach & \textbf{57.2} & \textbf{60.3} & \textbf{74.7} & \textbf{64.1}  \\
 
 \begin{figure*}[tbp]
 \centering
-\includegraphics[width=\textwidth]{img/attr.pdf}
-\caption{ \textbf{Buffy上袖子的聚类结果和DL上衣领的聚类结果}
+\includegraphics[width=\textwidth]{img/attr.jpg}
+\bicaption{\textbf{Buffy上袖子的聚类结果和DL上衣领的聚类结果}
 上面的框中的第一行表示袖子类别中的无袖类型，而第二行表示长袖类别。
 下面的框中的第一行表示衣领属性中的尖领类别，而第二行代表圆领类别。
-这两个框中的第二列都代表每一个属性的错误聚类结果。
-}
+这两个框中的第二列都代表每一个属性的错误聚类结果。}{\textbf{Buffy上袖子的聚类结果和DL上衣领的聚类结果}
+上面的框中的第一行表示袖子类别中的无袖类型，而第二行表示长袖类别。
+下面的框中的第一行表示衣领属性中的尖领类别，而第二行代表圆领类别。
+这两个框中的第二列都代表每一个属性的错误聚类结果。}{Fig}{\textbf{Visualization of pose results produced by our algorithm on the Buffy and DL datasets.}
+The top two panels are from Buffy and the others are from DL. We use the oriented bounding box to denote the pose estimation.
+The first panel of each dataset are correct results, while the second panel are incorrect results.
+The bounding box with red color denote the incorrect estimation.}
 \label{fig:sleeve}
 \end{figure*}
 
@@ -124,13 +132,19 @@ Our Approach & \textbf{57.2} & \textbf{60.3} & \textbf{74.7} & \textbf{64.1}  \\
 
 \begin{figure}
 \centering
-\includegraphics[width=.8\textwidth]{img/result.pdf}
-\caption{ \textbf{我们的算法在Buffy和DL数据集上得到的结果示例}
+\includegraphics[width=.8\textwidth]{img/result.jpg}
+\bicaption{\textbf{我们的算法在Buffy和DL数据集上得到的结果示例}
 上面两个框中的结果是Buffy数据集上的，剩下的是DL数据集上的。
 我们用带方向的矩形框来表示人体姿势识别的结果。
 每个数据集对应的第一个框是正确的结果，而第二个框是错误的结果。
-红色的矩形框代表错误的结果，其它颜色分别代表不同的人体躯干部位。
-}
+红色的矩形框代表错误的结果，其它颜色分别代表不同的人体躯干部位。}{\textbf{我们的算法在Buffy和DL数据集上得到的结果示例}
+上面两个框中的结果是Buffy数据集上的，剩下的是DL数据集上的。
+我们用带方向的矩形框来表示人体姿势识别的结果。
+每个数据集对应的第一个框是正确的结果，而第二个框是错误的结果。
+红色的矩形框代表错误的结果，其它颜色分别代表不同的人体躯干部位。}{Fig}{\textbf{Visualization of pose results produced by our algorithm on the Buffy and DL datasets.}
+The top two panels are from Buffy and the others are from DL. We use the oriented bounding box to denote the pose estimation.
+The first panel of each dataset are correct results, while the second panel are incorrect results.
+The bounding box with red color denote the incorrect estimation.}
 \label{fig:result}
 \end{figure}
 
@@ -140,4 +154,4 @@ Our Approach & \textbf{57.2} & \textbf{60.3} & \textbf{74.7} & \textbf{64.1}  \\
 从定性和定量的角度去对比了我们的工作和前人工作的性能差异，并且分析了我们工作的优势和不足。
 同时，我们展示了我们工作的另一个输出结果，将不同照片按照相似的衣服属性聚集在了一起，
 这样对于做衣服聚类工作是非常有效的，并且我们利用F1分值对聚类结果进行了评测。
-大量实验证明，我们提出的隐变量衣服属性方法取得了目前精度最好的人体姿势预测结果。
+大量实验证明，本文提出的隐变量衣服属性方法取得了目前精度最好的人体姿势预测结果。

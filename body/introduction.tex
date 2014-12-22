@@ -20,8 +20,8 @@
 然而它是一个非常困难的问题，特别是在没有任何辅助信息的情况下，而且对于手臂和腿部等变化比较丰富的人体部位。
 
 众所周知，可以用上下文信息（比如衣服属性、边缘信息等）来解决这个难题。
-在图\ref{fig:eg}中，a,b,c是三个候选结果，很明显如果我们知道一些上下文信息，很容易判断出只有c是正确解。
-因此，这种方法叫做上下文模型，即就是将图片上已知的信息加入到HPE问题中，来提高模型的准确性。
+举例来说，在图\ref{fig:eg}中，a，b，c是三个候选结果，很明显如果我们知道一些上下文信息，很容易判断出只有c是正确解。
+因此，这种方法叫做上下文模型，即就是将图片上已知的约束信息加入到HPE问题中，来提高模型的准确性。
 近来年，有很多学者做了这方面的工作\cite{deeppose,cvpr09}， 比如\cite{deeppose}，他将前背景和后背景对比信息加入到人体姿势预测中。
 Ladicky\cite{cvpr09}等人将人体姿势预测与图像分割联系起来，用通过这种联合学习的方式提高HPE的精度。
 在Jie Shen\cite{shen2014unified}等人的工作中，他们将人体姿势和衣服属性联合起来进行求解\cite{cvpr09}。
@@ -38,9 +38,9 @@ Ladicky\cite{cvpr09}等人将人体姿势预测与图像分割联系起来，用
 特征是用来刻画问题输入对象的重要参数，所以特征的设计选择直接影响着后续的问题建模与求解。 特征设计是机器学习领域非常重要的问题之一，往往一个问题的特征设计好坏与否直接关系到问题求解的优劣。 HOG特征在前人的很多工作中得到应用，它被证明可以很好的描述物体的形状，因而在我们的工作中，肢干本身的特征采用HOG特征。 关于相邻肢干的联合特征，我们主要考虑两个肢干的相对位置、相对角度和相对距离。
 跨问题的特征在于将人体姿势估计和衣服属性识别联系在一起，这也是我们工作的一大创新之处。 这种特征的特点在于，既依赖于一个给定的姿势估计，也依赖于一个给定的衣服属性。 我们通过内积的处理，得到一个由姿势估计和衣服属性同时决定的跨问题特征。
 
-我们采用隐式结构式支持向量机算法来进行模型的训练。
+本文采用隐式结构式支持向量机算法来进行模型的训练。
 相比于前人的工作，我们是第一个将衣服属性作为隐式变量，然后建立联合模型，对人体姿势估计和衣服属性识别同时进行推导求解的。 如何选择一个正确的模型算法来求解我们的问题是至关重要的，很显然，采用隐式结构式支持向量机来进行参数学习是非常适合我们的问题结构的。 然而结构式的学习框架有很多种，有基于概率模型的，也有基于优化模型的。这里，我们选择使用Chun-Nam等人的包含隐变量的结构式支持向量机（Latent Structural SVM）。 结构式支持向量机的关键在于，它允许研究人员根据自己的问题，设计自己的联合特征和损失函数，接着我们可以根据随机梯度下降法进行目标函数的优化。
-所有的隐变量问题都会涉及到隐变量的初始化问题，我们采用K-Means聚类算法来初始化隐变量。
+所有的隐变量问题都会涉及到隐变量的初始化问题，我们采用$K$-Means聚类算法来初始化隐变量。
 接着，我们采用增量迭代的方式来进行参数的学习，即就是最小化隐式结构式支持向量机的目标函数。
 更为详尽的，我们采用迭代的方式来训练模型，首先当衣服属性变量确定的时候，我们采用动态规划的算法进行人体姿势的求解。
 另一步是，当人体姿势确定的时候，我们可以采用第三章提出的算法来确定衣服属性的变量。
@@ -68,23 +68,33 @@ Ladicky\cite{cvpr09}等人将人体姿势预测与图像分割联系起来，用
 \begin{figure}[tbp]
     \centering
     \subfigure[]{
-        \includegraphics[width=.3\textwidth]{img/eg_a.pdf}
+        \includegraphics[width=.3\textwidth]{img/eg_a.jpg}
     }
     \subfigure[]{
-        \includegraphics[width=.3\textwidth]{img/eg_b.pdf}
+        \includegraphics[width=.3\textwidth]{img/eg_b.jpg}
     }
     \subfigure[]{
-        \includegraphics[width=.3\textwidth]{img/eg_c.pdf}
+        \includegraphics[width=.3\textwidth]{img/eg_c.jpg}
     }
-    \caption{
-    \textbf{在人体姿势预测问题中加入衣服属性的动机}
+    \bicaption{在人体姿势预测问题中加入衣服属性的动机，
 图中所示的三个人体姿势预测的结果，图（b）和图（c）中除了下臂预测错误，其它躯干预测的结果都是正确的。
 对于图（c）来说，我们可以通过形状特征来得出左右手臂的不同之处，从而可以将（c）排除掉，
 但是在图（b）中，左右手臂的不同之处很微小，我们很难用形状特征来区分出左右手臂。
 如果我们知道图中衣服属性的类别值，比如袖子的类别和颜色等。
 这样我们就可以根据袖子的颜色或者类别值来区分左右手臂，因为图（b）中左右手臂对应的衣服属性袖子颜色不一致。
-最后，我们得到了正确的预测结果，即图（a）。
-    }
+最后，我们得到了正确的预测结果，即图（a）。}{在人体姿势预测问题中加入衣服属性的动机
+图中所示的三个人体姿势预测的结果，图（b）和图（c）中除了下臂预测错误，其它躯干预测的结果都是正确的。
+对于图（c）来说，我们可以通过形状特征来得出左右手臂的不同之处，从而可以将（c）排除掉，
+但是在图（b）中，左右手臂的不同之处很微小，我们很难用形状特征来区分出左右手臂。
+如果我们知道图中衣服属性的类别值，比如袖子的类别和颜色等。
+这样我们就可以根据袖子的颜色或者类别值来区分左右手臂，因为图（b）中左右手臂对应的衣服属性袖子颜色不一致。
+最后，我们得到了正确的预测结果，即图（a）。}{Fig}{\textbf{Examples to demonstrate the benefit of integrating clothing attributes into HPE.}
+In the three results of HPE, all human poses in (b) and (c) are correct except lower arms.
+we can assume that (c) is incorrect based on the great appearance difference between left and right lower arm,
+but there is slight appearance difference in (b).
+If we know the clothing attribute type, e.g. the sleeve type or color,
+we can remove (b) based on the inconsistent color between the upper and lower arms.
+Finally, we get the correct estimation (a).}
     \label{fig:eg}
 \end{figure}
 
